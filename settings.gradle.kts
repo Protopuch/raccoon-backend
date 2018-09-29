@@ -1,5 +1,6 @@
 rootProject.name = "raccoon-backend"
 
+include(":backend")
 include(":arithmetic-engine")
 
 pluginManagement {

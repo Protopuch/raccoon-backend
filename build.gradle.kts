@@ -3,6 +3,7 @@ allprojects {
     version = property("version") as String
 
     repositories {
+        mavenCentral()
         jcenter()
     }
 }
