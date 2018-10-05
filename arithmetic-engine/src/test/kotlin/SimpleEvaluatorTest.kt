@@ -2,6 +2,7 @@ import com.raccoon.backend.arithmetic.ExpressionEvaluator
 import com.raccoon.backend.arithmetic.UnexpectedTokenException
 import com.raccoon.backend.arithmetic.internal.SimpleParser
 import com.raccoon.backend.arithmetic.internal.SimpleStackMachine
+import java.lang.IllegalArgumentException
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.test.*
@@ -198,6 +199,18 @@ class SimpleEvaluatorTest {
 
         inputs.forEach { (input, expected) ->
             assertEvaluate(input, expected, expected.absoluteValue * EPSILON_FACTOR)
+        }
+    }
+
+    @Test
+    fun `Simple stack machine reallocates storage for stack if needed`() {
+        assertFailsWith<IllegalArgumentException> { SimpleStackMachine(0) }
+        assertFailsWith<IllegalArgumentException> { SimpleStackMachine(-1) }
+        with(SimpleStackMachine(1)) {
+            dPush(2.0)
+            dPush(2.0)
+            dAdd()
+            assertEquals(4.0, dPop())
         }
     }
 

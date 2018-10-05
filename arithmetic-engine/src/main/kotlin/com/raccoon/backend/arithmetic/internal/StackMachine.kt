@@ -1,5 +1,8 @@
 package com.raccoon.backend.arithmetic.internal
 
+import java.lang.IllegalArgumentException
+import kotlin.math.ceil
+
 /**
  * A stack machine supporting double arithmetic.
  */
@@ -28,6 +31,10 @@ interface StackMachine {
  */
 class SimpleStackMachine(initialSize: Int = DEFAULT_SIZE) : StackMachine {
 
+    init {
+        if (initialSize <= 0) { throw IllegalArgumentException("Stack size must be positive.") }
+    }
+
     // Backing array for the stack.
     private var stack = DoubleArray(initialSize)
 
@@ -36,7 +43,7 @@ class SimpleStackMachine(initialSize: Int = DEFAULT_SIZE) : StackMachine {
 
     private fun ensureSize() {
         if (top == stack.lastIndex) {
-            stack = stack.copyOf((stack.size * SCALE_FACTOR).toInt())
+            stack = stack.copyOf(ceil(stack.size * SCALE_FACTOR).toInt())
         }
     }
 
