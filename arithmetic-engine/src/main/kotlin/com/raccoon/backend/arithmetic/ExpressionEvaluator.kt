@@ -6,6 +6,7 @@ interface ExpressionEvaluator {
     fun evaluate(expression: String): Double
 
     companion object {
+        @JvmStatic
         fun simpleEvaluator(): ExpressionEvaluator = SimpleEvaluator()
     }
 }

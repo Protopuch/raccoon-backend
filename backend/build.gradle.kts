@@ -25,4 +25,5 @@ dependencies {
     testCompile("junit", "junit", "4.12")
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile(project(":arithmetic-engine"))
 }
