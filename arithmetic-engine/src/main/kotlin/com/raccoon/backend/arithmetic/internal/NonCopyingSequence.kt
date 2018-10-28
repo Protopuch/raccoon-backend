@@ -1,5 +1,6 @@
 package com.raccoon.backend.arithmetic.internal
 
+/** An utility class allowing creating substrings without copying. */
 data class NonCopyingSequence(
     private val backing: CharSequence,
     private val start: Int = 0,

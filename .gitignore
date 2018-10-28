@@ -32,3 +32,4 @@ out/
 !gradle/wrapper/gradle-wrapper.jar
 
 #.idea/
+.idea/workspace.xml

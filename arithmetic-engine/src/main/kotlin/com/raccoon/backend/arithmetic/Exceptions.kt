@@ -28,4 +28,3 @@ class UnexpectedTokenException(
     message: String = "Unexpected token in expression '$expression' at position $offset",
     cause: Throwable? = null
 ) : ParsingException(expression, offset, message, cause)
-

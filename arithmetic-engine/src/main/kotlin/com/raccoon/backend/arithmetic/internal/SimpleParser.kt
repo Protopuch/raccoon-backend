@@ -21,8 +21,10 @@ class SimpleParser(
     private lateinit var lexer: Lexer
     private lateinit var input: String
 
-    private fun error(): Nothing = throw UnexpectedTokenException(input, lexer.lastToken.offset)
-    private fun next() = lexer.next()
+    private fun error(): Nothing = throw UnexpectedTokenException(input, lastToken.offset)
+    private fun nextToken() = lexer.next()
+    private val lastToken: Token
+        get() = lexer.lastToken
 
     private fun init(input: String) {
         stackMachine.reset()
@@ -39,41 +41,40 @@ class SimpleParser(
      */
     fun parse(input: String): Double {
         init(input)
-        expr()
-        eof()
+        processExpr()
+        processEof()
         return stackMachine.dPop()
     }
 
-    private fun eof() {
-        if (lexer.lastToken !is EOF) {
+    private fun processEof() {
+        if (lastToken !is EOF) {
             error()
         }
     }
 
-    private fun expr() {
-        term()
-        terms()
+    private fun processExpr() {
+        processTerm()
+        processTerms()
     }
 
-    private fun term() {
-        factor()
-        factors()
+    private fun processTerm() {
+        processFactor()
+        processFactors()
     }
 
-    private tailrec fun terms() {
-        val token = lexer.lastToken
-        when(token) {
+    private tailrec fun processTerms() {
+        when(lastToken) {
             is Plus -> {
-                next() // +
-                term()
+                nextToken()
+                processTerm()
                 stackMachine.dAdd()
-                terms()
+                processTerms()
             }
             is Minus -> {
-                next() // -
-                term()
+                nextToken()
+                processTerm()
                 stackMachine.dSub()
-                terms()
+                processTerms()
             }
             is EOF, is RightParenthesis -> { /* no op, empty rule */ }
             else -> error()
@@ -81,50 +82,49 @@ class SimpleParser(
     }
 
 
-    private fun factor() {
-        val token = lexer.lastToken
+    private fun processFactor() {
+        val token = lastToken // Read into a local variable to allow smart casting.
         when (token) {
             is Constant -> {
                 stackMachine.dPush(token.value)
-                next() // constant
+                nextToken()
             }
             is LeftParenthesis -> {
-                next() // (
-                expr()
-                if (lexer.lastToken is RightParenthesis) {
-                    next() // )
+                nextToken()
+                processExpr()
+                if (lastToken is RightParenthesis) {
+                    nextToken()
                 } else {
                     error()
                 }
             }
             is Minus -> {
-                next() // -
-                factor()
+                nextToken()
+                processFactor()
                 stackMachine.dNeg()
             }
             is Plus -> {
-                next() // +
-                factor()
-                // Nothing to do with the stack machine since +a == a
+                nextToken()
+                processFactor()
+                // Nothing to do with the stack machine since +a == a.
             }
             else -> error()
         }
     }
 
-    private tailrec fun factors() {
-        val token = lexer.lastToken
-        when(token) {
+    private tailrec fun processFactors() {
+        when(lastToken) {
             is Mul -> {
-                next() // *
-                factor()
+                nextToken()
+                processFactor()
                 stackMachine.dMul()
-                factors()
+                processFactors()
             }
             is Div -> {
-                next() // /
-                factor()
+                nextToken()
+                processFactor()
                 stackMachine.dDiv()
-                factors()
+                processFactors()
             }
             is EOF, is RightParenthesis, is Plus, is Minus -> { /* no op, empty rule */ }
             else -> error()

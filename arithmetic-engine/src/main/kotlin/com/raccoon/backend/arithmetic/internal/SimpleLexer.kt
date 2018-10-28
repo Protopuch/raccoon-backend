@@ -25,6 +25,8 @@ class SimpleLexer(val string: String): Lexer {
         )
 
     private fun readDouble(startIndex: Int): Double {
+        // Check that a substring starting from the startIndex starts with a constant.
+        // The requirement that the substring starts with the constant is already included in the regex.
         return CONSTANT_REGEX.find(string.nonCopyingSubSequence(startIndex))?.let {
             index = startIndex + it.value.length
             it.value.toDoubleOrNull()
@@ -69,6 +71,8 @@ class SimpleLexer(val string: String): Lexer {
     }
 
     companion object {
+        // A decimal positive real constant optionally in the scientific notation.
+        // E.g. 1.0, 42, 5.46e+134 etc.
         val CONSTANT_REGEX = "^\\d+(\\.\\d+)?(e[+-]?\\d+)?".toRegex(RegexOption.IGNORE_CASE)
         val factory: LexerFactory = object: LexerFactory {
             override fun create(string: String): Lexer = SimpleLexer(string)
