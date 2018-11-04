@@ -11,7 +11,7 @@ import com.raccoon.backend.arithmetic.UnexpectedTokenException
  *  <Expr>    : <Term><Terms>
  *  <Terms>   : +<Term><Terms> | -<Term><Terms> | empty
  *  <Term>    : <Factor><Factors>
- *  <Factors> : *<Factor><Factors> | /<Factor><Factors> | empty
+ *  <Factors> : *<Factor><Factors> | /<Factor><Factors>  | %<Factor><Factors> | empty
  *  <Factor>  : constant | (<Expr>) | -<Factor> | +<Factor>
  */
 class SimpleParser(
@@ -124,6 +124,12 @@ class SimpleParser(
                 nextToken()
                 processFactor()
                 stackMachine.dDiv()
+                processFactors()
+            }
+            is Mod -> {
+                nextToken()
+                processFactor()
+                stackMachine.dMod()
                 processFactors()
             }
             is EOF, is RightParenthesis, is Plus, is Minus -> { /* no op, empty rule */ }

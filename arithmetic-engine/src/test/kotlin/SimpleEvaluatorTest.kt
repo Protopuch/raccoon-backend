@@ -38,7 +38,8 @@ class SimpleEvaluatorTest {
             "++1--2" to 3.0,
             "4.2 * 4" to 16.8,
             "2 / 8" to 0.25,
-            "2 * -(2 + 2)" to -8.0
+            "2 * -(2 + 2)" to -8.0,
+            "25 % 2" to 1.0
         )
         expressions.forEach { (input, expected) ->
             assertEvaluate(input, expected)
@@ -87,12 +88,20 @@ class SimpleEvaluatorTest {
         assertEvaluate("-(42/+0.0)", Double.NEGATIVE_INFINITY)
         assertEvaluate("-(42/-0.0)", Double.POSITIVE_INFINITY)
 
-        // 0 / 0 -> Nan
+        // 0 / 0 -> NaN.
         val evaluator = ExpressionEvaluator.simpleEvaluator()
         assertTrue(evaluator.evaluate("0 / 0").isNaN())
         assertTrue(evaluator.evaluate("0 / -0").isNaN())
         assertTrue(evaluator.evaluate("-0 / 0").isNaN())
         assertTrue(evaluator.evaluate("-0 / -0").isNaN())
+
+        // 0 % x -> 0.
+        assertEvaluate("0 % 42", 0.0)
+        assertEvaluate("-0 % 42", -0.0)
+
+        // x % 0 -> NaN.
+        assertTrue(evaluator.evaluate("42 % 0").isNaN())
+        assertTrue(evaluator.evaluate("42 % -0").isNaN())
     }
 
     @Test
@@ -110,64 +119,77 @@ class SimpleEvaluatorTest {
             "42-2" to 40.0,
             "40/4" to 10.0,
             "10*4" to 40.0,
+            "41%3" to 2.0,
 
             // Negative integer numbers.
             "-42+(-2)" to -44.0,
             "-42-(-2)" to -40.0,
             "-40/(-4)" to 10.0,
             "-10*(-4)" to 40.0,
+            "-41%(-3)" to -2.0,
             "-2+42" to 40.0,
             "2-42"  to -40.0,
             "-40/4" to -10.0,
             "-10*4" to -40.0,
+            "-41%3" to -2.0,
+            "41%-3" to 2.0,
 
             // Positive real numbers.
             "42.5+2.25" to 44.75,
             "42.5-2.25" to 40.25,
             "40.5/2.5"  to 16.2,
-            "10.5*4.5 " to 47.25,
+            "10.5*4.5"  to 47.25,
+            "11.5%1.5"  to 1.0,
 
             // Negative real numbers.
             "-42.5+(-2.25)" to -44.75,
             "-42.5-(-2.25)" to -40.25,
             "-40.5/(-2.5)"  to 16.2,
-            "-10.5*(-4.5) " to 47.25,
+            "-10.5*(-4.5)"  to 47.25,
+            "-11.5%(-1.5)"  to -1.0,
             "-2.25+42.5" to 40.25,
-            "2.25-42.5" to -40.25,
+            "2.25-42.5"  to -40.25,
             "-40.5/2.5"  to -16.2,
             "-10.5*4.5 " to -47.25,
+            "-11.5%1.5"  to -1.0,
 
             // Positive big numbers.
             "25e12+1e13" to 3.5e13,
             "1e13-2e12"  to 8e12,
             "2e3*3e2"    to 6e5,
             "8e10/4e2"   to 2e8,
+            "8e10%3e10"  to 2e10,
 
             // Negative big numbers.
             "-25e12+(-1e13)" to -3.5e13,
             "-1e13-(-2e12)"  to -8e12,
             "-2e3*(-3e2)"    to 6e5,
             "-8e10/(-4e2)"   to 2e8,
+            "-8e10%(-3e10)"  to -2e10,
             "-10e12+1.5e13" to 5e12,
             "10e12-1.5e13" to -5e12,
             "-2e3*3e2"    to -6e5,
             "-8e10/4e2"   to -2e8,
+            "-8e10%3e10"  to -2e10,
 
             // Positive small numbers.
             "1e-12+25e-13" to 3.5e-12,
             "3e-12-20e-13" to 10e-13,
             "2e-3*3e-2"    to 6e-5,
             "8e-10/4e-2"   to 2e-8,
+            "8e-10%3e-10"  to 2e-10,
 
             // Negative small numbers.
             "-1e-12+(-25e-13)" to -3.5e-12,
             "-3e-12-(-20e-13)" to -10e-13,
             "-2e-3*(-3e-2)"    to 6e-5,
             "-8e-10/(-4e-2)"   to 2e-8,
+            "-8e-10%(-3e-10)"  to -2e-10,
             "-1e-12+3e-12" to 2e-12,
-            "1e-12-3e-12" to -2e-12,
-            "-2e-3*3e-2"  to -6e-5,
-            "-8e-10/4e-2" to -2e-8
+            "1e-12-3e-12"  to -2e-12,
+            "-2e-3*3e-2"   to -6e-5,
+            "-8e-10/4e-2"  to -2e-8,
+            "-8e-10%3e-10" to -2e-10
         )
 
         inputs.forEach { (input, expected) ->
@@ -182,16 +204,19 @@ class SimpleEvaluatorTest {
             "1+8/2" to 5.0,
             "9-2*3" to 3.0,
             "9-8/2" to 5.0,
+            "2+5%2" to 3.0,
 
             "(1+2)*3" to 9.0,
             "(1+8)/2" to 4.5,
             "(9-2)*3" to 21.0,
             "(9-8)/2" to 0.5,
+            "(2+5)%2" to 1.0,
 
             "((1+2))*3" to 9.0,
             "((1+8))/2" to 4.5,
             "((9-2))*3" to 21.0,
             "((9-8))/2" to 0.5,
+            "((2+5))%2" to 1.0,
 
             "2*((1+2)*3+1)" to 20.0,
             "22/((1+8)/2+1)" to 4.0

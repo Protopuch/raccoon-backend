@@ -5,7 +5,7 @@ import com.raccoon.backend.arithmetic.UnexpectedSymbolException
 
 /**
  * Supported:
- *  - Basic tokens: +, -, *, /, (, )
+ *  - Basic tokens: +, -, *, /, %, (, )
  *  - Double values with dot and in the scientific notation, e.g.
  *      1.2, 42, 1.0e34, 1e2, 1e-2
  */
@@ -61,6 +61,7 @@ class SimpleLexer(val string: String): Lexer {
                 '-' -> Minus(startIndex)
                 '*' -> Mul(startIndex)
                 '/' -> Div(startIndex)
+                '%' -> Mod(startIndex)
                 '(' -> LeftParenthesis(startIndex)
                 ')' -> RightParenthesis(startIndex)
                 else -> throw UnexpectedSymbolException(string, startIndex, char)

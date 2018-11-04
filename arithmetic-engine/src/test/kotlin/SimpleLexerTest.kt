@@ -12,7 +12,7 @@ class SimpleLexerTest {
 
     @Test
     fun `All basic tokens are supported`() {
-        assertTokens("+-*/()", plus, minus, mul, div, leftParenthesis, rightParenthesis)
+        assertTokens("+-*/%()", plus, minus, mul, div, mod, leftParenthesis, rightParenthesis)
     }
 
     @Test
@@ -24,7 +24,7 @@ class SimpleLexerTest {
     @Test
     fun `Lexer throws an exception for invalid symbols`() {
         val inputs = listOf(
-            "%" to 0,
+            "!" to 0,
             "123+456=579" to 7,
             "abc" to 0
         )
@@ -102,6 +102,7 @@ class SimpleLexerTest {
         val minus = Minus(-1)
         val mul = Mul(-1)
         val div = Div(-1)
+        val mod = Mod(-1)
 
         val leftParenthesis = LeftParenthesis(-1)
         val rightParenthesis = RightParenthesis(-1)

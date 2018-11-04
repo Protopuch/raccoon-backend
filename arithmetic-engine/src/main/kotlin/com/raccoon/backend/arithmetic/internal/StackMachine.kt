@@ -18,6 +18,7 @@ interface StackMachine {
     fun dSub()
     fun dMul()
     fun dDiv()
+    fun dMod()
 
     // Unary minus.
     fun dNeg()
@@ -78,6 +79,12 @@ class SimpleStackMachine(initialSize: Int = DEFAULT_SIZE) : StackMachine {
     override fun dDiv() {
         val rhs = dPop()
         stack[top] /= rhs
+    }
+
+    /** @throws IndexOutOfBoundsException - if stack doesn't contain enough elements */
+    override fun dMod() {
+        val rhs = dPop()
+        stack[top] %= rhs
     }
 
     override fun dNeg() {

@@ -38,6 +38,7 @@ class Plus(offset: Int): Token(offset)
 class Minus(offset: Int): Token(offset)
 class Mul(offset: Int): Token(offset)
 class Div(offset: Int): Token(offset)
+class Mod(offset: Int): Token(offset)
 
 class LeftParenthesis(offset: Int): Token(offset)
 class RightParenthesis(offset: Int): Token(offset)
