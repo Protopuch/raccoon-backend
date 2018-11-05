@@ -26,8 +26,10 @@ hs_err_pid*
 **/target/
 **/build/
 .gradle/
+out/
 
 # Gradle wrapper
 !gradle/wrapper/gradle-wrapper.jar
 
 #.idea/
+.idea/workspace.xml
