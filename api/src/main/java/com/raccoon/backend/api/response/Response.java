@@ -1,18 +1,18 @@
-package com.raccon.backend.web;
+package com.raccoon.backend.api.response;
 
 @SuppressWarnings("unused")
-class Response<T> {
+public class Response<T> {
     private Status status;
     private T result;
     private String message;
 
-    Response(Status status, T result, String message) {
+    public Response(Status status, T result, String message) {
         this.status = status;
         this.result = result;
         this.message = message;
     }
 
-    Response(Status status, T result) {
+    public Response(Status status, T result) {
         this(status, result, null);
     }
 
@@ -28,7 +28,7 @@ class Response<T> {
         return message;
     }
 
-    enum Status {
+    public enum Status {
         OK,
         FAIL
     }
