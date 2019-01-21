@@ -1,6 +1,6 @@
-package com.raccon.backend.web;
+package com.raccoon.backend.api.request;
 
-class Request {
+public class Request {
     @SuppressWarnings("unused")
     private String expression;
 
