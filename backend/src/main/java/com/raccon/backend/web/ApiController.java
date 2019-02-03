@@ -18,7 +18,7 @@ public class ApiController {
     public Response<Double> healthCheck() {
         double result = evaluator.healthCheck();
         String message = "2 + 2 = " + result;
-        return new Response<>(Response.Status.OK, result, message);
+        return new Response<>(Response.Status.HEALTH_CHECK_ETO_HOROSHECHNO, result, message);
     }
 
     @GetMapping("/evaluate")

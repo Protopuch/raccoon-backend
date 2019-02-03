@@ -30,6 +30,7 @@ class Response<T> {
 
     enum Status {
         OK,
-        FAIL
+        FAIL,
+        HEALTH_CHECK_ETO_HOROSHECHNO
     }
 }
