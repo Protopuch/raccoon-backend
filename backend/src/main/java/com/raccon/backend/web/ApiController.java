@@ -15,7 +15,7 @@ import java.util.Date;
 @CrossOrigin(maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST})
 public class ApiController {
 
-    static private int EXPRESSION_LENGTH_THRESHOLD = 10000;
+    private int EXPRESSION_LENGTH_THRESHOLD = 2000;
 
     @Autowired
     private EvaluatorService evaluator;
