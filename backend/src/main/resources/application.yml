@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: raccoon-backend
+
+
+server:
+  port: 7777
