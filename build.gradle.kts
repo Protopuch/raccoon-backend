@@ -5,5 +5,6 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
+        maven(url = "https://raw.github.com/weddini/spring-boot-throttling/mvn-repo")
     }
 }

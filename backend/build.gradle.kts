@@ -25,5 +25,6 @@ dependencies {
     testCompile("junit", "junit", "4.12")
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("com.weddini.throttling:spring-boot-throttling-starter:0.0.9")
     compile(project(":arithmetic-engine"))
 }
