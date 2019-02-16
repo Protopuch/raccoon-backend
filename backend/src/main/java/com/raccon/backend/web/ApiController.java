@@ -1,6 +1,8 @@
 package com.raccon.backend.web;
 
 import com.raccon.backend.calc.EvaluatorService;
+import com.weddini.throttling.Throttling;
+import com.weddini.throttling.ThrottlingType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 @Validated
@@ -20,6 +23,7 @@ public class ApiController {
     @Autowired
     private EvaluatorService evaluator;
 
+    @Throttling(type = ThrottlingType.RemoteAddr, limit = 5, timeUnit = TimeUnit.SECONDS)
     @GetMapping("/health-check")
     @ResponseBody
     public Response<Double> healthCheck() {
@@ -41,6 +45,7 @@ public class ApiController {
         System.out.println(expression);
     }
 
+    @Throttling(type = ThrottlingType.RemoteAddr, limit = 5, timeUnit = TimeUnit.SECONDS)
     @GetMapping("/evaluate")
     @ResponseBody
     public Response<Double> evaluate(@RequestParam("expression") String expression) {
@@ -52,6 +57,7 @@ public class ApiController {
         return new Response<>(Response.Status.OK, evaluator.evaluate(expression));
     }
 
+    @Throttling(type = ThrottlingType.RemoteAddr, limit = 5, timeUnit = TimeUnit.SECONDS)
     @PostMapping("/evaluate")
     public Response<Double> evaluate(@RequestBody Request request) {
         logExpression(request.getExpression());
