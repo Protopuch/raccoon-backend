@@ -1,3 +1,5 @@
+package evaluator
+
 import com.raccoon.backend.arithmetic.ExpressionEvaluator
 import com.raccoon.backend.arithmetic.UnexpectedTokenException
 import com.raccoon.backend.arithmetic.internal.SimpleParser

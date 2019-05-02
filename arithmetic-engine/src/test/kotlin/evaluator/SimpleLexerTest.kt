@@ -1,3 +1,5 @@
+package evaluator
+
 import com.raccoon.backend.arithmetic.UnexpectedSymbolException
 import com.raccoon.backend.arithmetic.internal.*
 import kotlin.test.*
@@ -12,7 +14,16 @@ class SimpleLexerTest {
 
     @Test
     fun `All basic tokens are supported`() {
-        assertTokens("+-*/%()", plus, minus, mul, div, mod, leftParenthesis, rightParenthesis)
+        assertTokens(
+            "+-*/%()",
+            plus,
+            minus,
+            mul,
+            div,
+            mod,
+            leftParenthesis,
+            rightParenthesis
+        )
     }
 
     @Test
@@ -82,14 +93,24 @@ class SimpleLexerTest {
             "0.6E-10" to 0.6e-10
         )
         numbers.forEach { (input, expected) ->
-            assertTokens(input, constant(expected))
+            assertTokens(
+                input,
+                constant(expected)
+            )
         }
     }
 
     @Test
     fun `Lexer ignores whitespace characters`() {
         assertTokens("     2.0", constant(2.0))
-        assertTokens("3 +\t2\n-1", constant(3), plus, constant(2), minus, constant(1))
+        assertTokens(
+            "3 +\t2\n-1",
+            constant(3),
+            plus,
+            constant(2),
+            minus,
+            constant(1)
+        )
         assertTokens("+    ", plus)
         assertTokens("    ")
     }
