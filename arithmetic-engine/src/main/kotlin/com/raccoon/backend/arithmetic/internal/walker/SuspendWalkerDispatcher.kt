@@ -73,7 +73,7 @@ class DefaultDispatcher<R>(): SuspendWalkerDispatcher<R>() {
      * @return traversing result determined by the given [visitor].
      */
     override suspend fun process(node: Element, visitor: SuspendVisitor<R>): R {
-        return suspendCoroutine<R> { continuation ->
+        return suspendCoroutine { continuation ->
             val processNext = suspend {
                 continuation.resumeWith(result)
             }.createCoroutine(Continuation(EmptyCoroutineContext) {})

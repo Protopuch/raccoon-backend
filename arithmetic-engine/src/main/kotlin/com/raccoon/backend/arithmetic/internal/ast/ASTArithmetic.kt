@@ -3,7 +3,7 @@ package com.raccoon.backend.arithmetic.internal.ast
 import com.raccoon.backend.arithmetic.internal.walker.SuspendVisitor
 import com.raccoon.backend.arithmetic.internal.walker.Visitor
 
-// TODO: Move tokens with the same names in separate package/class
+// TODO: Move tokens with the same names in a separate package/class
 
 abstract class UnaryOperator(val argument: Expression): Expression() {
 

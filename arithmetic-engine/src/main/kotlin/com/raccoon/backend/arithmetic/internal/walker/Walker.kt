@@ -5,9 +5,9 @@ import com.raccoon.backend.arithmetic.internal.ast.Element
 /**
  * Basic interface for classes performing some processing over an AST.
  */
-interface Walker<R> {
+interface Walker<in T: Element, out R> {
     /** Traverse the given AST returning some result. */
-    fun walk(root: Element): R
+    fun walk(root: T): R
 }
 
 /**
@@ -16,10 +16,10 @@ interface Walker<R> {
  *  1. Create a subclass and implement all `visit...` methods you need.
  *  2. To process a child of a node call the [process] method.
  */
-abstract class AbstractRecursiveWalker<R>: Visitor<R>, Walker<R> {
+abstract class AbstractRecursiveWalker<in T: Element, out R>: Visitor<R>, Walker<T, R> {
 
     /** Traverse the given AST returning a result determined by certain subclass implementation. */
-    override fun walk(root: Element): R = process(root)
+    override fun walk(root: T): R = process(root)
 
     /** Processes the given node and returns a result determined by subclass implementation*/
     protected fun process(node: Element): R = node.accept(this)
@@ -38,12 +38,12 @@ abstract class AbstractRecursiveWalker<R>: Visitor<R>, Walker<R> {
  * @param dispatcher - a dispatching object encapsulating logic of starting and suspending of
  *  coroutines used to traverse the AST (see [SuspendWalkerDispatcher]).
  */
-abstract class AbstractSuspendWalker<R>(
+abstract class AbstractSuspendWalker<in T: Element, out R>(
     private val dispatcher: SuspendWalkerDispatcher<R> = DefaultDispatcher()
-): SuspendVisitor<R>, Walker<R> {
+): SuspendVisitor<R>, Walker<T, R> {
 
     /** Traverse the given AST returning a result determined by certain subclass implementation. */
-    override fun walk(root: Element): R = dispatcher.walk(root, this)
+    override fun walk(root: T): R = dispatcher.walk(root, this)
 
     /**
      * Processes the given node probably suspending the current coroutine.
